@@ -1,7 +1,7 @@
 #include "Snake.h"
 #include "raylib.h"
 #include <memory>
-
+#include<unistd.h>
 void processKeyPresses(std::unique_ptr<Snake>& snake);
 
 int main(){
@@ -16,17 +16,28 @@ int main(){
         processKeyPresses(snake);
 
         BeginDrawing();
-            ClearBackground(BLACK);
-            
-            for (auto segment : snake->getSnakeSegments()){
+        ClearBackground(BLACK);
+           
+        for (auto segment : snake->getSnakeSegments()){
 
-                DrawRectangle(segment.m_position_vector.x, segment.m_position_vector.y,20.0f,20.0f, GREEN);
+            DrawRectangle(segment.m_position_vector.x, segment.m_position_vector.y,20.0f,20.0f, GREEN);
 
-            }
-    
-        EndDrawing();
+        }
+
+        if(snake->checkCollisions()){
+            DrawText("Game Over!",
+                    GetRenderWidth()/2-MeasureText("Game Over!",16),
+                    GetRenderHeight()/2,
+                    16,
+                    GREEN);
+
+            EndDrawing();
+            usleep(5*10e5);
+            break;
+        }
+ 
         snake->moveSnake();
-    
+        EndDrawing(); 
     }
 
     return 0;

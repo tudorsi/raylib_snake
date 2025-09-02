@@ -65,3 +65,10 @@ void Snake::changeDirection(SnakeDirection direction){
     m_direction = direction;
 
 }
+
+bool Snake::checkCollisions() const{    
+    return m_segments[0].m_position_vector.x <= 0 || 
+        m_segments[0].m_position_vector.y <= 0 || 
+        m_segments[0].m_position_vector.x >= GetRenderWidth() || 
+        m_segments[0].m_position_vector.y >= GetRenderHeight();
+}
