@@ -11,8 +11,8 @@ Snake::Snake(int snake_size, SnakeDirection snake_direction)
         for(int i = 0; i < snake_size; ++i){
             SnakeSegment snake_segment;
             snake_segment.m_position_vector ={
-                400.0f - (i * segment_size * 1.25f), 
-                300.0f
+                (GetRenderWidth()/2.0f) - (i * segment_size * 1.25f), 
+                GetRenderHeight()/2.0f
             };
             m_segments.push_back(snake_segment);
 

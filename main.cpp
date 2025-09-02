@@ -4,10 +4,9 @@
 
 int main(){
 
+    InitWindow(800,600, "Snake");
+    
     std::unique_ptr<Snake> snake = std::make_unique<Snake>(Snake(3, SnakeDirection::MOVE_UP));
-    
-    
-    InitWindow(800.0f, 600.0f, "Snake");
     
     while(!WindowShouldClose()){
         BeginDrawing();
