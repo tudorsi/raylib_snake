@@ -1,8 +1,6 @@
 #include <deque>
 #include "SnakeSegment.h"
 
-//TODO: Make method for moving snake (segment[i] moves to position of segment[i-1]
-
 enum SnakeDirection {
 
     MOVE_UP,
@@ -21,7 +19,10 @@ class Snake{
    public:
        Snake(int snake_size, SnakeDirection direction);
        const std::deque<SnakeSegment>& getSnakeSegments() const;
+       SnakeDirection getDirection() const;
        void changeDirection(SnakeDirection direction);
-
+       void moveSnake();
 
 };
+
+
