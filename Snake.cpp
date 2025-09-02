@@ -2,16 +2,16 @@
 #include "raylib.h"
 #include <deque>
 
+const float SEGMENT_SIZE = 20.0f;
 Snake::Snake(int snake_size, SnakeDirection snake_direction)
     :m_direction(snake_direction){
 
-        float segment_size = 20.0f;
 
         // generate snake segments
         for(int i = 0; i < snake_size; ++i){
             SnakeSegment snake_segment;
             snake_segment.m_position_vector ={
-                (GetRenderWidth()/2.0f) - (i * segment_size), 
+                (GetRenderWidth()/2.0f) - (i * SEGMENT_SIZE), 
                 GetRenderHeight()/2.0f
             };
             m_segments.push_back(snake_segment);
@@ -71,4 +71,14 @@ bool Snake::checkCollisions() const{
         m_segments[0].m_position_vector.y <= 0 || 
         m_segments[0].m_position_vector.x >= GetRenderWidth() || 
         m_segments[0].m_position_vector.y >= GetRenderHeight();
+}
+
+void Snake::handleSnack(){
+    SnakeSegment snake_segment;
+    snake_segment.m_position_vector ={
+    m_segments.back().m_position_vector.x + SEGMENT_SIZE, 
+    m_segments.back().m_position_vector.y
+    };
+
+    m_segments.push_back(snake_segment);
 }

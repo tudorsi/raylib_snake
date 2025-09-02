@@ -23,6 +23,7 @@ class Snake{
        void changeDirection(SnakeDirection direction);
        void moveSnake();
        bool checkCollisions() const;
+       void handleSnack();
 
 };
 
