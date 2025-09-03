@@ -86,14 +86,14 @@ void processKeyPresses(std::unique_ptr<Snake>& snake){
 
 Vector2 generateSnackPosition(){
 
-   int display_range_x = GetRenderWidth() - 10 + 1;
-   int display_range_y = GetRenderHeight() - 10 + 1;
-   Vector2 snack_position = {
-       1.0f * (std::rand() % display_range_x + 10),
-       1.0f * (std::rand() % display_range_y + 10)
-   };
+    int display_range_x = GetRenderWidth() - 10 + 1;
+    int display_range_y = GetRenderHeight() - 10 + 1;
+    Vector2 snack_position = {
+        1.0f * (std::rand() % display_range_x + 10),
+        1.0f * (std::rand() % display_range_y + 10)
+    };
 
-   return snack_position;
+    return snack_position;
 }
 
 bool checkSnackCollision(const std::unique_ptr<Snake>& snake, const std::unique_ptr<Snack>& snack){
@@ -103,6 +103,7 @@ bool checkSnackCollision(const std::unique_ptr<Snake>& snake, const std::unique_
         20.0f, 
         20.0f
     };
+
     Rectangle snakeRectangle = {
         snake->getSnakeSegments().front().m_position_vector.x, 
         snake->getSnakeSegments().front().m_position_vector.y, 
