@@ -47,19 +47,22 @@ int main(){
         
         //check wall collisions
         if(snake->checkCollisions()){
-            DrawText("Game Over!",
-                    GetRenderWidth()/2-MeasureText("Game Over!",16),
-                    GetRenderHeight()/2,
-                    16,
-                    GREEN);
+            DrawText(
+                "Game Over!",
+                GetRenderWidth()/2-MeasureText("Game Over!",16),
+                GetRenderHeight()/2,
+                16,
+                GREEN
+            );
 
             EndDrawing();
             usleep(5*10e5);
             break;
         }
  
+//        snake->moveSnake();
+        EndDrawing();
         snake->moveSnake();
-        EndDrawing(); 
     }
 
     return 0;
