@@ -2,8 +2,10 @@
 #include "raylib.h"
 #include <cstdlib>
 #include <memory>
+#include <ostream>
 #include<unistd.h>
 #include "Snack.h"
+#include <iostream>
 
 //TODO:tidy up main, extract logic into separate functions
 
@@ -12,18 +14,15 @@ Vector2 generateSnackPosition();
 bool checkSnackCollision(const std::unique_ptr<Snake>& snake, const std::unique_ptr<Snack>& snack);
 
 int main(){
-    
-//    SetConfigFlags(FLAG_WINDOW_HIGHDPI);    
     InitWindow(800,600, "Snake");
     SetTargetFPS(10);
 
     std::unique_ptr<Snake> snake = std::make_unique<Snake>(Snake(3, SnakeDirection::MOVE_LEFT));
-
+    std::cout << "initial snake head position is: " << snake->getSnakeSegments().front().m_position_vector.x << std::endl;
     std::unique_ptr<Snack> snack = std::make_unique<Snack>(Snack());
     snack->m_snack_position = generateSnackPosition();
 
     while(!WindowShouldClose()){
-       
         processKeyPresses(snake);
 
         BeginDrawing();
@@ -45,7 +44,7 @@ int main(){
             snack->m_snack_position = generateSnackPosition();
         }
         
-        //check wall collisions
+        //check wall/self collisions
         if(snake->checkCollisions()){
             DrawText(
                 "Game Over!",
@@ -59,8 +58,7 @@ int main(){
             usleep(5*10e5);
             break;
         }
- 
-//        snake->moveSnake();
+
         EndDrawing();
         snake->moveSnake();
     }
@@ -69,23 +67,21 @@ int main(){
 }
 
 void processKeyPresses(std::unique_ptr<Snake>& snake){
+    if(IsKeyPressed(KEY_UP) && snake->getDirection() != SnakeDirection::MOVE_DOWN){
+        snake->changeDirection(SnakeDirection::MOVE_UP);
+    }
 
-        if(IsKeyPressed(KEY_UP) && snake->getDirection() != SnakeDirection::MOVE_DOWN){
-            snake->changeDirection(SnakeDirection::MOVE_UP);
-        }
-
-        if(IsKeyPressed(KEY_DOWN) && snake->getDirection() != SnakeDirection::MOVE_UP){
-            snake->changeDirection(SnakeDirection::MOVE_DOWN);
-        }
+    if(IsKeyPressed(KEY_DOWN) && snake->getDirection() != SnakeDirection::MOVE_UP){
+        snake->changeDirection(SnakeDirection::MOVE_DOWN);
+    }
   
-        if(IsKeyPressed(KEY_LEFT) && snake->getDirection() != SnakeDirection::MOVE_RIGHT){
-            snake->changeDirection(SnakeDirection::MOVE_LEFT);
-        }
+    if(IsKeyPressed(KEY_LEFT) && snake->getDirection() != SnakeDirection::MOVE_RIGHT){
+        snake->changeDirection(SnakeDirection::MOVE_LEFT);
+    }
 
-        if(IsKeyPressed(KEY_RIGHT) && snake->getDirection() != SnakeDirection::MOVE_LEFT){
-            snake->changeDirection(SnakeDirection::MOVE_RIGHT);
-        }
-
+    if(IsKeyPressed(KEY_RIGHT) && snake->getDirection() != SnakeDirection::MOVE_LEFT){
+        snake->changeDirection(SnakeDirection::MOVE_RIGHT);
+    }
 }
 
 Vector2 generateSnackPosition(){
@@ -93,15 +89,14 @@ Vector2 generateSnackPosition(){
    int display_range_x = GetRenderWidth() - 10 + 1;
    int display_range_y = GetRenderHeight() - 10 + 1;
    Vector2 snack_position = {
-        1.0f * (std::rand() % display_range_x + 10),
-        1.0f * (std::rand() % display_range_y + 10)
+       1.0f * (std::rand() % display_range_x + 10),
+       1.0f * (std::rand() % display_range_y + 10)
    };
 
    return snack_position;
 }
 
 bool checkSnackCollision(const std::unique_ptr<Snake>& snake, const std::unique_ptr<Snack>& snack){
-
     Rectangle snackRectangle = {
         snack->m_snack_position.x, 
         snack->m_snack_position.y, 
