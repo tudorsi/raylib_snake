@@ -30,9 +30,7 @@ int main(){
         
         //draw snake
         for (auto segment : snake->getSnakeSegments()){
-
             DrawRectangle(segment.m_position_vector.x, segment.m_position_vector.y,20.0f,20.0f, GREEN);
-
         }
 
         //draw snack
@@ -85,7 +83,6 @@ void processKeyPresses(std::unique_ptr<Snake>& snake){
 }
 
 Vector2 generateSnackPosition(){
-
     int display_range_x = GetRenderWidth() - 10 + 1;
     int display_range_y = GetRenderHeight() - 10 + 1;
     Vector2 snack_position = {
