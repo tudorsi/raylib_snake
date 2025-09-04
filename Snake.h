@@ -18,6 +18,7 @@ class Snake{
     public:
         Snake(int snake_size, SnakeDirection direction);
         const std::deque<SnakeSegment>& getSnakeSegments() const;
+        void drawSnake() const;
         SnakeDirection getDirection() const;
         void changeDirection(SnakeDirection direction);
         void moveSnake();

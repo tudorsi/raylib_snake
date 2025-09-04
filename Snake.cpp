@@ -23,9 +23,20 @@ const std::deque<SnakeSegment>& Snake::getSnakeSegments() const{
     return m_segments;
 }
 
+void Snake::drawSnake() const{
+    for (const auto& segment: m_segments){
+        DrawRectangleV(segment.m_position_vector,{SEGMENT_SIZE, SEGMENT_SIZE}, GREEN);
+    }    
+}
+
 SnakeDirection Snake::getDirection() const{
     return m_direction;
 }
+
+void Snake::changeDirection(SnakeDirection direction){
+    m_direction = direction;
+}
+
 
 void Snake::moveSnake(){
     switch(m_direction){
@@ -59,10 +70,6 @@ void Snake::moveSnake(){
     };
 
     m_segments.pop_back();
-}
-
-void Snake::changeDirection(SnakeDirection direction){
-    m_direction = direction;
 }
 
 bool Snake::checkCollisions() const{ 

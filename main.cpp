@@ -2,12 +2,13 @@
 #include "raylib.h"
 #include <cstdlib>
 #include <memory>
-#include <ostream>
 #include<unistd.h>
 #include "Snack.h"
-#include <iostream>
 
-//TODO:tidy up main, extract logic into separate functions
+const char* GAME_OVER_TEXT {"Game Over!"};
+const int GAME_OVER_FONT_SIZE {20};
+const float SEGMENT_SIZE {20.0};
+const int SNAKE_INITIAL_SIZE {3};
 
 void processKeyPresses(std::unique_ptr<Snake>& snake);
 Vector2 generateSnackPosition();
@@ -15,10 +16,14 @@ bool checkSnackCollision(const std::unique_ptr<Snake>& snake, const std::unique_
 
 int main(){
     InitWindow(800,600, "Snake");
+    
+    const int GAME_OVER_POS_X {GetRenderWidth()/2 - MeasureText(GAME_OVER_TEXT, GAME_OVER_FONT_SIZE)};
+    const int GAME_OVER_POS_Y {GetRenderHeight()/2};
+
     SetTargetFPS(10);
 
-    std::unique_ptr<Snake> snake = std::make_unique<Snake>(Snake(3, SnakeDirection::MOVE_LEFT));
-    std::cout << "initial snake head position is: " << snake->getSnakeSegments().front().m_position_vector.x << std::endl;
+    std::unique_ptr<Snake> snake = std::make_unique<Snake>(Snake(SNAKE_INITIAL_SIZE, SnakeDirection::MOVE_LEFT));
+    
     std::unique_ptr<Snack> snack = std::make_unique<Snack>(Snack());
     snack->m_snack_position = generateSnackPosition();
 
@@ -26,17 +31,11 @@ int main(){
         processKeyPresses(snake);
 
         BeginDrawing();
-        ClearBackground(BLACK);
         
-        //draw snake
-        for (auto segment : snake->getSnakeSegments()){
-            DrawRectangle(segment.m_position_vector.x, segment.m_position_vector.y,20.0f,20.0f, GREEN);
-        }
+        ClearBackground(BLACK);
+        snake->drawSnake();
+        DrawRectangleV(snack->m_snack_position, {SEGMENT_SIZE, SEGMENT_SIZE}, RED);
 
-        //draw snack
-        DrawRectangleV(snack->m_snack_position, {20,20}, RED);
-
-        //check snack colision
         if(checkSnackCollision(snake,snack)){
             snake->handleSnack();
             snack->m_snack_position = generateSnackPosition();
@@ -45,10 +44,10 @@ int main(){
         //check wall/self collisions
         if(snake->checkCollisions()){
             DrawText(
-                "Game Over!",
-                GetRenderWidth()/2-MeasureText("Game Over!",16),
-                GetRenderHeight()/2,
-                16,
+                GAME_OVER_TEXT,
+                GAME_OVER_POS_X, 
+                GAME_OVER_POS_Y,
+                GAME_OVER_FONT_SIZE,
                 GREEN
             );
 
@@ -94,19 +93,19 @@ Vector2 generateSnackPosition(){
 }
 
 bool checkSnackCollision(const std::unique_ptr<Snake>& snake, const std::unique_ptr<Snack>& snack){
-    Rectangle snackRectangle = {
+    Rectangle snackRectangle{
         snack->m_snack_position.x, 
         snack->m_snack_position.y, 
-        20.0f, 
-        20.0f
+        SEGMENT_SIZE, 
+        SEGMENT_SIZE
     };
 
-    Rectangle snakeRectangle = {
+    Rectangle snakeRectangle{
         snake->getSnakeSegments().front().m_position_vector.x, 
         snake->getSnakeSegments().front().m_position_vector.y, 
-        20.0f, 
-        20.0f
+        SEGMENT_SIZE, 
+        SEGMENT_SIZE
     };
 
-    return CheckCollisionRecs(snackRectangle,snakeRectangle);
+    return CheckCollisionRecs(snackRectangle, snakeRectangle);
 }
